@@ -34,6 +34,11 @@
   td { padding: 9px 0; border-bottom: 0.5px solid #1e1e1c; color: #e8e6df; }
   td:last-child { text-align: right; font-weight: 500; }
   tr.current td { color: #1D9E75; }
+  @media (max-width: 600px) {
+    body { padding: 1rem; }
+    .cards { grid-template-columns: 1fr; }
+    .input-row { grid-template-columns: 1fr; }
+  }
 </style>
 </head>
 <body>
