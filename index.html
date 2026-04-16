@@ -37,6 +37,9 @@
   .mobile body { padding: 1rem; }
   .mobile .cards { grid-template-columns: 1fr; }
   .mobile .input-row { grid-template-columns: 1fr; }
+  #gem-btn { display: none; width: 100%; padding: 12px; border: none; border-radius: 8px; font-size: 15px; font-weight: 500; cursor: pointer; margin-top: 8px; transition: background 0.2s; }
+  #gem-btn.dirty { display: block; background: #1D9E75; color: #fff; }
+  #gem-btn.saved { display: block; background: #2a2a28; color: #555; cursor: default; }
 </style>
 </head>
 <body>
@@ -47,6 +50,7 @@
   <button onclick="checkPin()">Bekræft</button>
   <span class="error" id="err">Forkert PIN-kode</span>
 </div>
+<button id="gem-btn" class="saved" onclick="gemVaerdier()">Gemt</button>
 
 <div id="app">
 <h1>Timer-overblik</h1>
@@ -186,15 +190,32 @@
   if (savedTimer) document.getElementById('inp-timer').value = savedTimer;
   if (savedMaal) document.getElementById('inp-maal').value = savedMaal;
 
+  function gemVaerdier() {
+    const t = document.getElementById('inp-timer').value;
+    const m = document.getElementById('inp-maal').value;
+    localStorage.setItem('timer', t);
+    localStorage.setItem('maal', m);
+    const btn = document.getElementById('gem-btn');
+    btn.textContent = 'Gemt';
+    btn.className = 'saved';
+    document.getElementById('inp-timer').blur();
+    document.getElementById('inp-maal').blur();
+    update();
+  }
+
   document.getElementById('inp-timer').addEventListener('input', function() {
-    localStorage.setItem('timer', this.value);
+    const btn = document.getElementById('gem-btn');
+    btn.textContent = 'Gem';
+    btn.className = 'dirty';
     update();
   });
   document.getElementById('inp-timer').addEventListener('keydown', function(e) {
     if (e.key === 'Enter') { this.blur(); update(); }
   });
   document.getElementById('inp-maal').addEventListener('input', function() {
-    localStorage.setItem('maal', this.value);
+    const btn = document.getElementById('gem-btn');
+    btn.textContent = 'Gem';
+    btn.className = 'dirty';
     update();
   });
   document.getElementById('inp-maal').addEventListener('keydown', function(e) {
