@@ -93,9 +93,15 @@
 </div>
 
 <script>
+  if (localStorage.getItem('pin') === 'qwerty123') {
+    document.getElementById('lock').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+  }
+
   function checkPin() {
     const pin = document.getElementById('pin').value;
     if (pin === 'qwerty123') {
+      localStorage.setItem('pin', pin);
       document.getElementById('lock').style.display = 'none';
       document.getElementById('app').style.display = 'block';
     } else {
