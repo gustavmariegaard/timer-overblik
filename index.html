@@ -190,9 +190,15 @@
     localStorage.setItem('timer', this.value);
     update();
   });
+  document.getElementById('inp-timer').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') { this.blur(); update(); }
+  });
   document.getElementById('inp-maal').addEventListener('input', function() {
     localStorage.setItem('maal', this.value);
     update();
+  });
+  document.getElementById('inp-maal').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') { this.blur(); update(); }
   });
   update();
 </script>
