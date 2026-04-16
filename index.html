@@ -181,7 +181,19 @@
       </tr>`;
   }
 
-  document.querySelectorAll('#app input').forEach(el => el.addEventListener('input', update));
+  const savedTimer = localStorage.getItem('timer');
+  const savedMaal = localStorage.getItem('maal');
+  if (savedTimer) document.getElementById('inp-timer').value = savedTimer;
+  if (savedMaal) document.getElementById('inp-maal').value = savedMaal;
+
+  document.getElementById('inp-timer').addEventListener('input', function() {
+    localStorage.setItem('timer', this.value);
+    update();
+  });
+  document.getElementById('inp-maal').addEventListener('input', function() {
+    localStorage.setItem('maal', this.value);
+    update();
+  });
   update();
 </script>
 </body>
