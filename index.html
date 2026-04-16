@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="da">
+<html lang="da" style="height:100%">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +7,12 @@
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #1a1a18; color: #e8e6df; padding: 2rem; }
+  #lock { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; gap: 12px; }
+  #lock p { font-size: 14px; color: #888; }
+  #lock input { background: #252523; border: 0.5px solid #3a3a38; border-radius: 6px; color: #e8e6df; font-size: 15px; padding: 8px 10px; outline: none; text-align: center; letter-spacing: 0.1em; }
+  #lock button { background: #1D9E75; border: none; border-radius: 6px; color: #fff; font-size: 14px; padding: 8px 20px; cursor: pointer; }
+  #lock .error { color: #D85A30; font-size: 13px; display: none; }
+  #app { display: none; }
   h1 { font-size: 22px; font-weight: 500; margin-bottom: 1.5rem; }
   .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 1.5rem; }
   .card { background: #252523; border-radius: 10px; padding: 14px 16px; }
@@ -27,12 +33,19 @@
   th:last-child { text-align: right; }
   td { padding: 9px 0; border-bottom: 0.5px solid #1e1e1c; color: #e8e6df; }
   td:last-child { text-align: right; font-weight: 500; }
-  tr.past td { opacity: 1; }
-  tr.future td { opacity: 0.35; }
   tr.current td { color: #1D9E75; }
 </style>
 </head>
 <body>
+
+<div id="lock">
+  <p>Indtast PIN-kode</p>
+  <input type="password" id="pin" placeholder="••••••••" maxlength="20">
+  <button onclick="checkPin()">Bekræft</button>
+  <span class="error" id="err">Forkert PIN-kode</span>
+</div>
+
+<div id="app">
 <h1>Timer-overblik</h1>
 
 <div class="cards">
@@ -77,8 +90,20 @@
   </thead>
   <tbody id="uge-tabel"></tbody>
 </table>
+</div>
 
 <script>
+  function checkPin() {
+    const pin = document.getElementById('pin').value;
+    if (pin === 'qwerty123') {
+      document.getElementById('lock').style.display = 'none';
+      document.getElementById('app').style.display = 'block';
+    } else {
+      document.getElementById('err').style.display = 'block';
+    }
+  }
+  document.getElementById('pin').addEventListener('keydown', e => { if (e.key === 'Enter') checkPin(); });
+
   const now = new Date();
   const year = now.getFullYear();
   const month = now.getMonth();
@@ -86,7 +111,7 @@
   const maaneder = ['Januar','Februar','Marts','April','Maj','Juni','Juli','August','September','Oktober','November','December'];
 
   document.getElementById('c-maaned').textContent = maaneder[month] + ' ' + year;
-  document.getElementById('tbl-titel').textContent = 'Fredagsmål – ' + maaneder[month] + ' ' + year;
+  document.getElementById('tbl-titel').textContent = 'MTD – ' + maaneder[month] + ' ' + year;
 
   function workdaysInMonth(y, m) {
     const days = new Date(y, m+1, 0).getDate();
@@ -133,7 +158,6 @@
       subEl.textContent = diff >= 0 ? 'Forud' : 'Bagud';
     }
 
-    const daysInMonth = new Date(year, month+1, 0).getDate();
     const burde = Math.round(maal / arbDage * arbGaaet);
     document.getElementById('uge-tabel').innerHTML = `
       <tr class="current">
@@ -143,7 +167,7 @@
       </tr>`;
   }
 
-  document.querySelectorAll('input').forEach(el => el.addEventListener('input', update));
+  document.querySelectorAll('#app input').forEach(el => el.addEventListener('input', update));
   update();
 </script>
 </body>
